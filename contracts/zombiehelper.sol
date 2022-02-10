@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.4.19;
+
 import "./zombiefeeding.sol";
 
 contract ZombieHelper is ZombieFeeding {
@@ -11,9 +11,13 @@ contract ZombieHelper is ZombieFeeding {
     _;
   }
 
-  // 1. ここにwithdraw関数を作成するのだ
+  function withdraw() external onlyOwner {
+    owner.transfer(this.balance);
+  }
 
-  // 2. ここにsetLevelUpFee関数を作成せよ
+  function setLevelUpFee(uint _fee) external onlyOwner {
+    levelUpFee = _fee;
+  }
 
   function levelUp(uint _zombieId) external payable {
     require(msg.value == levelUpFee);
