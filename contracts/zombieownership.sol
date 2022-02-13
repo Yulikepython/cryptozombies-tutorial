@@ -1,0 +1,37 @@
+pragma solidity ^0.4.19;
+
+import "./zombieattack.sol";
+import "./erc721.sol";
+
+contract ZombieOwnership is ZombieAttack, ERC721 {
+
+  // 1. マッピングをここで定義せよ
+
+  function balanceOf(address _owner) public view returns (uint256 _balance) {
+    return ownerZombieCount[_owner];
+  }
+
+  function ownerOf(uint256 _tokenId) public view returns (address _owner) {
+    return zombieToOwner[_tokenId];
+  }
+
+  function _transfer(address _from, address _to, uint256 _tokenId) private {
+    ownerZombieCount[_to]++;
+    ownerZombieCount[_from]--;
+    zombieToOwner[_tokenId] = _to;
+    Transfer(_from, _to, _tokenId);
+  }
+
+  function transfer(address _to, uint256 _tokenId) public onlyOwnerOf(_tokenId) {
+    _transfer(msg.sender, _to, _tokenId);
+  }
+
+  // 2. ここに関数修飾詞を追加すること
+  function approve(address _to, uint256 _tokenId) public {
+    // 3. ここに関数を定義すること
+  }
+
+  function takeOwnership(uint256 _tokenId) public {
+
+  }
+}
